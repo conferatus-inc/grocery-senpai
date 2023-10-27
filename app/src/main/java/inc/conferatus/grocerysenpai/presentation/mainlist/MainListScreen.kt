@@ -1,4 +1,4 @@
-package inc.conferatus.grocerysenpai.presentation.grocerylist
+package inc.conferatus.grocerysenpai.presentation.mainlist
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -17,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import inc.conferatus.grocerysenpai.R
-import inc.conferatus.grocerysenpai.presentation.grocerylist.component.GroceryItemComponent
-import inc.conferatus.grocerysenpai.presentation.grocerylist.component.GroceryItemTextInputComponent
-import inc.conferatus.grocerysenpai.presentation.grocerylist.component.GroceryNoItemsTextComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
 
 // todo TODO!!!!!!!!!!!!
 // split onto components
@@ -28,7 +29,7 @@ import inc.conferatus.grocerysenpai.presentation.grocerylist.component.GroceryNo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
-fun GroceryListScreen(viewModel: GroceryListViewModel = GroceryListViewModel()) {
+fun MainListScreen(viewModel: MainListViewModel = MainListViewModel()) {
     val groceryListUiState by viewModel.uiState.collectAsState()
 
     Scaffold (
@@ -36,14 +37,15 @@ fun GroceryListScreen(viewModel: GroceryListViewModel = GroceryListViewModel()) 
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.app_name)
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.headlineSmall
                     )
                 }
             )
         },
 
         bottomBar = {
-            GroceryItemTextInputComponent(
+            MainItemTextInputComponent(
                 value = viewModel.itemInput,
                 onInsertClick = viewModel::addItem,
                 onValueChange = viewModel::updateItemInput,
@@ -58,11 +60,11 @@ fun GroceryListScreen(viewModel: GroceryListViewModel = GroceryListViewModel()) 
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            if (groceryListUiState.groceryListItems.isEmpty()) {
-                GroceryNoItemsTextComponent()
+            if (groceryListUiState.groceryItems.isEmpty()) {
+                MainNoItemsTextComponent()
             } else {
-                groceryListUiState.groceryListItems.forEach {
-                    GroceryItemComponent(
+                groceryListUiState.groceryItems.forEach {
+                    MainItemComponent(
                         item = it,
                         onRemove = viewModel::removeItem
                     )
