@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import inc.conferatus.grocerysenpai.R
-import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
 
@@ -64,9 +64,11 @@ fun MainListScreen(viewModel: MainListViewModel = MainListViewModel()) {
                 MainNoItemsTextComponent()
             } else {
                 groceryListUiState.groceryItems.forEach {
-                    MainItemComponent(
-                        item = it,
-                        onRemove = viewModel::removeItem
+                    MainItemEntryComponent(
+                        mainText = it.name,
+                        secondaryText = it.description,
+                        amountText = "%d %s".format(it.amount, it.amountPostfix),
+                        onRemoveButton = { viewModel.removeItem(it) }
                     )
                 }
             }
