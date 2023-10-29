@@ -21,6 +21,7 @@ import inc.conferatus.grocerysenpai.R
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
+//import androidx.hilt.navigation.compose.hiltViewModel
 
 // todo TODO!!!!!!!!!!!!
 // split onto components
@@ -28,8 +29,8 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showSystemUi = true, showBackground = true)
-fun MainListScreen(viewModel: MainListViewModel = MainListViewModel()) {
+//@Preview(showSystemUi = true, showBackground = true)
+fun MainListScreen(viewModel: MainListViewModel) {
     val groceryListUiState by viewModel.uiState.collectAsState()
 
     Scaffold (
