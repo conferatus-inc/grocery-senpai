@@ -65,7 +65,7 @@ fun MainListScreen(viewModel: MainListViewModel = MainListViewModel()) {
             } else {
                 groceryListUiState.groceryItems.forEach {
                     MainItemEntryComponent(
-                        mainText = it.name,
+                        mainText = it.category.name,
                         secondaryText = it.description,
                         amountText = "%d %s".format(it.amount, it.amountPostfix),
                         onRemoveButton = { viewModel.removeItem(it) }
