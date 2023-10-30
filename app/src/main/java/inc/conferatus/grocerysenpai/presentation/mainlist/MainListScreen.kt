@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import inc.conferatus.grocerysenpai.R
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
@@ -50,7 +49,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 value = viewModel.itemInput,
                 onInsertClick = viewModel::addItem,
                 onValueChange = viewModel::updateItemInput,
-                isError = !viewModel.itemInputValidate
+                isError = !viewModel.isInputValidated
             )
         }
 
@@ -67,7 +66,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 groceryListUiState.groceryItems.forEach {
                     MainItemEntryComponent(
                         mainText = it.category.name,
-                        secondaryText = it.description,
+                        secondaryText = it.description + " ; bought on " + it.bought,
                         amountText = "%d %s".format(it.amount, it.amountPostfix),
                         onRemoveButton = { viewModel.removeItem(it) }
                     )
