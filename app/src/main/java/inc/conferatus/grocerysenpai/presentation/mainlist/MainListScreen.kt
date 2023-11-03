@@ -46,13 +46,13 @@ fun MainListScreen(viewModel: MainListViewModel) {
             )
         },
 
-        bottomBar = { // FIXME Column ломает отображание предметов в списке сверху (???)
+        bottomBar = { // FIXME Column ломает отображение предметов в списке сверху (???)
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Bottom
             ) {
 
-                ListOfCategories(viewModel.itemInput)
+                ListOfCategories(viewModel.itemInput, viewModel::addItem)
 
                 MainItemTextInputComponent(
                     value = viewModel.itemInput,
