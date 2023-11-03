@@ -1,8 +1,11 @@
 package inc.conferatus.grocerysenpai.presentation.mainlist
 
+import ListOfCategories
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,9 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import inc.conferatus.grocerysenpai.R
-import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
-import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
+
 //import androidx.hilt.navigation.compose.hiltViewModel
 
 // todo TODO!!!!!!!!!!!!
@@ -32,7 +34,7 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 fun MainListScreen(viewModel: MainListViewModel) {
     val groceryListUiState by viewModel.uiState.collectAsState()
 
-    Scaffold (
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = {
@@ -44,16 +46,26 @@ fun MainListScreen(viewModel: MainListViewModel) {
             )
         },
 
-        bottomBar = {
-            MainItemTextInputComponent(
-                value = viewModel.itemInput,
-                onInsertClick = viewModel::addItem,
-                onValueChange = viewModel::updateItemInput,
-                isError = !viewModel.isInputValidated
-            )
-        }
+        bottomBar = { // FIXME Column ломает отображание предметов в списке сверху (???)
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom
+            ) {
 
-){ innerPadding ->
+                ListOfCategories(viewModel.itemInput)
+
+                MainItemTextInputComponent(
+                    value = viewModel.itemInput,
+                    onInsertClick = viewModel::addItem,
+                    onValueChange = { value ->
+                        viewModel.updateItemInput(value)
+                    },
+                    isError = !viewModel.isInputValidated
+                )
+            }
+        },
+
+        ) { innerPadding ->
         Column(
             Modifier
                 .fillMaxHeight()
