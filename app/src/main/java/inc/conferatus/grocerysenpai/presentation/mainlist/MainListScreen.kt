@@ -60,18 +60,30 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            if (groceryListUiState.groceryItems.isEmpty()) {
-                MainNoItemsTextComponent()
-            } else {
-                groceryListUiState.groceryItems.forEach {
-                    MainItemEntryComponent(
-                        mainText = it.category.name,
-                        secondaryText = it.description + " ; bought on " + it.bought,
-                        amountText = "%d %s".format(it.amount, it.amountPostfix),
-                        onRemoveButton = { viewModel.removeItem(it) }
-                    )
-                }
+            viewModel.categoriesListSingletone.categories.forEach {
+                Text(
+                    text = it.name
+                )
             }
+
+            Text(
+                text = "all in all" + viewModel.categoriesListSingletone.categories.size
+            )
+
+//            if (groceryListUiState.groceryItems.isEmpty()) {
+//                MainNoItemsTextComponent()
+//            } else {
+//                groceryListUiState.groceryItems.forEach {
+//                    MainItemEntryComponent(
+//                        mainText = it.category.name,
+//                        secondaryText = it.description + " ; bought on " + it.bought,
+//                        amountText = "%d %s".format(it.amount, it.amountPostfix),
+//                        onRemoveButton = { viewModel.removeItem(it) }
+//                    )
+//                }
+//            }
+
+
         }
     }
 }
