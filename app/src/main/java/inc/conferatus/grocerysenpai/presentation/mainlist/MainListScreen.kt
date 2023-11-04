@@ -1,6 +1,6 @@
 package inc.conferatus.grocerysenpai.presentation.mainlist
 
-import ListOfCategories
+import ListOfCategoriesComponent
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,7 +52,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 verticalArrangement = Arrangement.Bottom
             ) {
 
-                ListOfCategories(viewModel.itemInput, viewModel::addItem)
+                ListOfCategoriesComponent(viewModel.itemInput, viewModel::addItem)
 
                 MainItemTextInputComponent(
                     value = viewModel.itemInput,
