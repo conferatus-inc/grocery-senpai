@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import inc.conferatus.grocerysenpai.R
@@ -29,29 +30,32 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 //import androidx.hilt.navigation.compose.hiltViewModel
 
 // todo TODO!!!!!!!!!!!!
-// split onto components
 // focus change after typing is finished
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//@Preview(showSystemUi = true, showBackground = true)
 fun MainListScreen(viewModel: MainListViewModel) {
     val groceryListUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            })
-
+            TopAppBar(
+                modifier = Modifier.height(50.dp),
+                title = {
+                    Text(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .fillMaxWidth(),
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+            )
         },
 
-        bottomBar = { // FIXME Column ломает отображение предметов в списке сверху (???)
+        bottomBar = {
             Surface(
-                color = Color.Transparent,
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Column {
                     Spacer(modifier = Modifier.padding(3.dp))
@@ -80,12 +84,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            viewModel.categoriesListSingletone.categories.forEach {
-                Text(
-                    text = it.name
-                )
-            }
-
+            Spacer(modifier = Modifier.padding(5.dp))
 
             if (groceryListUiState.groceryItems.isEmpty()) {
                 MainNoItemsTextComponent()
