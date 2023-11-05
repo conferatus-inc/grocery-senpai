@@ -1,7 +1,6 @@
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +13,7 @@ import inc.conferatus.grocerysenpai.model.items.CategoryItem
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ListOfCategoriesComponent(userInput: String, onClick: () -> Unit) {
+fun ListOfCategoriesComponent(modifier: Modifier, userInput: String, onClick: () -> Unit) {
     val categories = listOf(
         // TODO: take from DB
         CategoryItem(1, "Хлеб"),
@@ -34,7 +33,6 @@ fun ListOfCategoriesComponent(userInput: String, onClick: () -> Unit) {
         CategoryItem(3, "Сахар"),
     )
 
-    // TODO: не показывать те категории, которые уже добавлены
     // TODO: возможно фильтровать с учётом грамматических ошибок
     fun filterCategories(categories: List<CategoryItem>): List<CategoryItem> {
         return categories.filter { category ->
@@ -49,8 +47,8 @@ fun ListOfCategoriesComponent(userInput: String, onClick: () -> Unit) {
 
     val boxPadding = 10.dp
     FlowRow(
-        modifier = Modifier.padding(horizontal = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(boxPadding)
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(boxPadding),
     ) {
         for (category in sortCategories(filterCategories(categories))) {
             TextButton(
