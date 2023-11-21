@@ -20,17 +20,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import inc.conferatus.grocerysenpai.R
+import inc.conferatus.grocerysenpai.model.util.CategoriesUtils
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
 
 //import androidx.hilt.navigation.compose.hiltViewModel
 
 // todo TODO!!!!!!!!!!!!
-// split onto components
+// todo мб сюда вообще не отдавать айтемы, а чисто стрингами все?? подумать как будет лучше архитектурно
 // focus change after typing is finished
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//@Preview(showSystemUi = true, showBackground = true)
 fun MainListScreen(viewModel: MainListViewModel) {
     val groceryListUiState by viewModel.uiState.collectAsState()
 
@@ -52,8 +54,10 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 verticalArrangement = Arrangement.Bottom
             ) {
 
-                ListOfCategoriesComponent(viewModel.itemInput, viewModel::addItem)
-
+                ListOfCategoriesComponent(
+                    onCategoryClick = { viewModel.updateItemInput(it) },
+                    categories = viewModel.suggestedCategories
+                )
                 MainItemTextInputComponent(
                     value = viewModel.itemInput,
                     onInsertClick = viewModel::addItem,
@@ -71,30 +75,19 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            viewModel.categoriesListSingletone.categories.forEach {
-                Text(
-                    text = it.name
-                )
+
+            if (groceryListUiState.groceryItems.isEmpty()) {
+                MainNoItemsTextComponent()
+            } else {
+                groceryListUiState.groceryItems.forEach {
+                    MainItemEntryComponent(
+                        mainText = it.category.name,
+                        secondaryText = it.description + " ; bought on " + it.bought,
+                        amountText = "%d %s".format(it.amount, it.amountPostfix),
+                        onRemoveButton = { viewModel.removeItem(it) }
+                    )
+                }
             }
-
-            Text(
-                text = "all in all" + viewModel.categoriesListSingletone.categories.size
-            )
-
-//            if (groceryListUiState.groceryItems.isEmpty()) {
-//                MainNoItemsTextComponent()
-//            } else {
-//                groceryListUiState.groceryItems.forEach {
-//                    MainItemEntryComponent(
-//                        mainText = it.category.name,
-//                        secondaryText = it.description + " ; bought on " + it.bought,
-//                        amountText = "%d %s".format(it.amount, it.amountPostfix),
-//                        onRemoveButton = { viewModel.removeItem(it) }
-//                    )
-//                }
-//            }
-
-
         }
     }
 }
