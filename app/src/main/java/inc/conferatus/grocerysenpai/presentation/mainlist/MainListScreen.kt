@@ -34,7 +34,7 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainListScreen(viewModel: MainListViewModel) {
-    val groceryListUiState by viewModel.uiState.collectAsState()
+    val currentGroceries by viewModel.currentGroceries.collectAsState(initial = emptyList())
 
     Scaffold(
         topBar = {
@@ -76,10 +76,10 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 .verticalScroll(rememberScrollState())
         ) {
 
-            if (groceryListUiState.groceryItems.isEmpty()) {
+            if (currentGroceries.isEmpty()) {
                 MainNoItemsTextComponent()
             } else {
-                groceryListUiState.groceryItems.forEach {
+                currentGroceries.forEach {
                     MainItemEntryComponent(
                         mainText = it.category.name,
                         secondaryText = it.description + " ; bought on " + it.bought,
