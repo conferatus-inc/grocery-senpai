@@ -48,7 +48,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
 
         bottomBar = { // FIXME Column ломает отображение предметов в списке сверху (???)
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier,
                 verticalArrangement = Arrangement.Bottom
             ) {
 
@@ -63,9 +63,8 @@ fun MainListScreen(viewModel: MainListViewModel) {
                     isError = !viewModel.isInputValidated
                 )
             }
-        },
-
-        ) { innerPadding ->
+        }
+    ) { innerPadding ->
         Column(
             Modifier
                 .fillMaxHeight()
@@ -99,3 +98,4 @@ fun MainListScreen(viewModel: MainListViewModel) {
         }
     }
 }
+
