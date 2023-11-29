@@ -2,10 +2,14 @@ package inc.conferatus.grocerysenpai.presentation.mainlist
 
 import CategoriesSuggesterComponent
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -33,7 +37,7 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 // todo мб сюда вообще не отдавать айтемы, а чисто стрингами все?? подумать как будет лучше архитектурно
 // todo focus change after typing is finished
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainListScreen(
     viewModel: MainListViewModel,
@@ -81,23 +85,24 @@ fun MainListScreen(
             }
         }
     ) { innerPadding ->
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-        ) {
-
-            if (currentGroceries.isEmpty()) {
-                MainNoItemsTextComponent()
-            } else {
-                currentGroceries.forEach {
+        if (currentGroceries.isEmpty()) {
+            MainNoItemsTextComponent(modifier = Modifier.padding(innerPadding))
+        } else {
+            LazyColumn(
+                Modifier
+                    .fillMaxHeight()
+                    .padding(innerPadding)
+            ) {
+                items(
+                    currentGroceries
+                ) {
                     MainListEntryComponent(
                         mainText = it.category.name,
                         secondaryText = it.description,
                         amountText = "%d %s".format(it.amount, it.amountPostfix),
                         onDoneButton = { viewModel.buyItem(it) },
-                        onRemoveButton = { viewModel.removeItem(it) }
+                        onRemoveButton = { viewModel.removeItem(it) },
+                        modifier = Modifier.animateItemPlacement()
                     )
                 }
             }
