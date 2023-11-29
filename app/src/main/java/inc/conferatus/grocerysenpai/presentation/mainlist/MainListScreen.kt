@@ -1,11 +1,10 @@
 package inc.conferatus.grocerysenpai.presentation.mainlist
 
-import ListOfCategoriesComponent
+import CategoriesSuggesterComponent
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import inc.conferatus.grocerysenpai.R
-import inc.conferatus.grocerysenpai.model.util.CategoriesUtils
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
@@ -29,7 +27,7 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 
 // todo TODO!!!!!!!!!!!!
 // todo мб сюда вообще не отдавать айтемы, а чисто стрингами все?? подумать как будет лучше архитектурно
-// focus change after typing is finished
+// todo focus change after typing is finished
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,21 +46,21 @@ fun MainListScreen(viewModel: MainListViewModel) {
             )
         },
 
-        bottomBar = { // FIXME Column ломает отображение предметов в списке сверху (???)
+        bottomBar = {
             Column(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.Bottom
             ) {
 
-                ListOfCategoriesComponent(
-                    onCategoryClick = { viewModel.updateItemInput(it) },
+                CategoriesSuggesterComponent(
+                    onCategoryClick = { viewModel.updateInput(it) },
                     categories = viewModel.suggestedCategories
                 )
                 MainItemTextInputComponent(
-                    value = viewModel.itemInput,
+                    value = viewModel.textInput,
                     onInsertClick = viewModel::addItem,
                     onValueChange = { value ->
-                        viewModel.updateItemInput(value)
+                        viewModel.updateInput(value)
                     },
                     isError = !viewModel.isInputValidated
                 )
@@ -82,7 +80,7 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 currentGroceries.forEach {
                     MainItemEntryComponent(
                         mainText = it.category.name,
-                        secondaryText = it.description + " ; bought on " + it.bought,
+                        secondaryText = it.description,
                         amountText = "%d %s".format(it.amount, it.amountPostfix),
                         onRemoveButton = { viewModel.removeItem(it) }
                     )
