@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,8 +23,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import inc.conferatus.grocerysenpai.R
-import inc.conferatus.grocerysenpai.presentation.mainlist.component.HistoryEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
+import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainListEntryComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
 
 //import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,7 +35,10 @@ import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsT
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainListScreen(viewModel: MainListViewModel) {
+fun MainListScreen(
+    viewModel: MainListViewModel,
+    onGoToHistoryClick: () -> Unit
+) {
     val currentGroceries by viewModel.currentGroceries.collectAsState(initial = emptyList())
 
     Scaffold(
@@ -42,6 +49,13 @@ fun MainListScreen(viewModel: MainListViewModel) {
                         text = stringResource(R.string.app_name),
                         style = MaterialTheme.typography.headlineSmall
                     )
+                },
+                actions = {
+                    IconButton(
+                        onClick = onGoToHistoryClick
+                    ) {
+                        Icon(Icons.Default.DateRange, stringResource(R.string.go_to_history_btn))
+                    }
                 }
             )
         },
@@ -78,10 +92,11 @@ fun MainListScreen(viewModel: MainListViewModel) {
                 MainNoItemsTextComponent()
             } else {
                 currentGroceries.forEach {
-                    HistoryEntryComponent(
+                    MainListEntryComponent(
                         mainText = it.category.name,
                         secondaryText = it.description,
                         amountText = "%d %s".format(it.amount, it.amountPostfix),
+                        onDoneButton = { viewModel.buyItem(it) },
                         onRemoveButton = { viewModel.removeItem(it) }
                     )
                 }
@@ -89,4 +104,3 @@ fun MainListScreen(viewModel: MainListViewModel) {
         }
     }
 }
-
