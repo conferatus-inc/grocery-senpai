@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,7 +59,7 @@ fun MainListScreen(
                     IconButton(
                         onClick = onGoToHistoryClick
                     ) {
-                        Icon(Icons.Default.DateRange, stringResource(R.string.go_to_history_btn))
+                        Icon(Icons.Default.History, stringResource(R.string.go_to_history_btn))
                     }
                 }
             )
