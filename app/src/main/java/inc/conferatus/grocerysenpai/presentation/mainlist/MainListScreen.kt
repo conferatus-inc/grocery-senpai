@@ -1,19 +1,13 @@
 package inc.conferatus.grocerysenpai.presentation.mainlist
 
 import CategoriesSuggesterComponent
-import android.annotation.SuppressLint
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,18 +21,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import inc.conferatus.grocerysenpai.R
+import inc.conferatus.grocerysenpai.presentation.common.component.OnEmptyMessageComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainListEntryComponent
-import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainNoItemsTextComponent
 
 //import androidx.hilt.navigation.compose.hiltViewModel
 
 // todo TODO!!!!!!!!!!!!
 // todo мб сюда вообще не отдавать айтемы, а чисто стрингами все?? подумать как будет лучше архитектурно
 // todo focus change after typing is finished
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainListScreen(
     viewModel: MainListViewModel,
@@ -86,26 +81,27 @@ fun MainListScreen(
             }
         }
     ) { innerPadding ->
-        if (currentGroceries.isEmpty()) {
-            MainNoItemsTextComponent(modifier = Modifier.padding(innerPadding))
-        } else {
-            LazyColumn(
-                Modifier
-                    .fillMaxHeight()
-                    .padding(innerPadding)
-            ) {
-                items(
-                    currentGroceries
-                ) {
-                    MainListEntryComponent(
-                        mainText = it.category.name,
-                        secondaryText = it.description,
-                        amountText = "%d %s".format(it.amount, it.amountPostfix),
-                        onDoneButton = { viewModel.buyItem(it) },
-                        onRemoveButton = { viewModel.removeItem(it) },
-                        modifier = Modifier.animateItemPlacement()
-                    )
-                }
+        LazyColumn(
+            Modifier
+                .fillMaxHeight()
+                .padding(innerPadding)
+        ) {
+            items(currentGroceries) {
+                MainListEntryComponent(
+                    mainText = it.category.name,
+                    secondaryText = it.description,
+                    amountText = "%d %s".format(it.amount, it.amountPostfix),
+                    onDoneButton = { viewModel.buyItem(it) },
+                    onRemoveButton = { viewModel.removeItem(it) }
+                )
+            }
+
+            item {
+                Text(
+                    text = stringResource(R.string.suggested_text),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(10.dp, 10.dp)
+                )
             }
         }
     }
