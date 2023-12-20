@@ -9,20 +9,24 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import inc.conferatus.grocerysenpai.R
+import inc.conferatus.grocerysenpai.presentation.common.component.EntryComponent
 import inc.conferatus.grocerysenpai.presentation.common.component.OnEmptyMessageComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainItemTextInputComponent
 import inc.conferatus.grocerysenpai.presentation.mainlist.component.MainListEntryComponent
@@ -40,6 +44,12 @@ fun MainListScreen(
     onGoToHistoryClick: () -> Unit
 ) {
     val currentGroceries by viewModel.currentGroceries.collectAsState(initial = emptyList())
+
+    val suggestions by viewModel.historyConvertedToSend.collectAsState(initial = emptyList())
+
+    SideEffect {
+        viewModel.getSuggested(SendHistoryDto(items = suggestions))
+    }
 
     Scaffold(
         topBar = {
@@ -101,6 +111,16 @@ fun MainListScreen(
                     text = stringResource(R.string.suggested_text),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(10.dp, 10.dp)
+                )
+            }
+
+            items(viewModel.suggestedProds) {
+                EntryComponent(
+                    mainText = it.category,
+                    secondaryText = it.nextBuy,
+                    amountText = "",
+//                    onDoneButton = { /*TODO*/ },
+//                    onRemoveButton = { /*TODO*/ })
                 )
             }
         }
