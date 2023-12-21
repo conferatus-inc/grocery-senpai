@@ -3,7 +3,7 @@
 build/
 
 # Local configuration file (sdk path, etc)
-local.properties
+frontend/local.properties
 
 # Log/OS Files
 *.log
@@ -35,7 +35,7 @@ google-services.json
 # Also auto-generated stuff
 *.iml
 .gradle
-/local.properties
+/frontend/local.properties
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -47,4 +47,4 @@ google-services.json
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+frontend/local.properties
