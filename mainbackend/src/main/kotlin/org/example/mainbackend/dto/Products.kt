@@ -2,7 +2,7 @@ package org.example.mainbackend.dto
 
 import java.time.LocalDateTime
 
-data class ProductsHistory(
+data class Products(
     val items: List<Product>,
 )
 
