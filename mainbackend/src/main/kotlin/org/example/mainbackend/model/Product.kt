@@ -4,6 +4,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import java.time.OffsetDateTime
 
@@ -17,6 +18,6 @@ data class Product(
     @Column(nullable = false)
     val boughtOn: OffsetDateTime,
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     val user: User,
 )
