@@ -3,7 +3,7 @@
 build/
 
 # Local configuration file (sdk path, etc)
-local.properties
+frontend/local.properties
 
 # Log/OS Files
 *.log
@@ -31,3 +31,20 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Also auto-generated stuff
+*.iml
+.gradle
+/frontend/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+frontend/local.properties
