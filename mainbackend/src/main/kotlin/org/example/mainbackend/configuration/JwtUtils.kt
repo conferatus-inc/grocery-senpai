@@ -1,87 +1,80 @@
-package org.example.mainbackend.configuration;
+package org.example.mainbackend.configuration
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import lombok.RequiredArgsConstructor;
-import org.example.mainbackend.model.User;
-import org.example.mainbackend.service.AccountService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.stream.Collectors;
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
+import org.example.mainbackend.model.Role
+import org.example.mainbackend.model.User
+import org.example.mainbackend.service.AccountService
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
+import java.util.*
+import java.util.stream.Collectors
 
 @Service
-@RequiredArgsConstructor
-public class JwtUtils {
-    private final long accessTokenLifetime = 5*60*1000;
-    private final long refreshTokenLifetime = 500*60*1000;
-    private final AccountService accountService;
-    @Value("${security.secret}")
-    private String secret;
+class JwtUtils(
+    private val accountService: AccountService,
+) {
+    private val accessTokenLifetime = (5 * 60 * 1000).toLong()
+    private val refreshTokenLifetime = (500 * 60 * 1000).toLong()
 
-    public Tokens createTokens(User user) {
-        String username = user.getUsername();
-        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
-        String accessToken = JWT.create()
+    @Value("\${security.secret}")
+    private val secret: String? = null
+
+    fun createTokens(user: User): Tokens {
+        val username = user.username
+        val algorithm = Algorithm.HMAC256(secret!!.toByteArray())
+        val accessToken =
+            JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenLifetime))
+                .withExpiresAt(Date(System.currentTimeMillis() + accessTokenLifetime))
                 .withIssuer("access")
-                .withIssuedAt(new Date())
-                .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
-                .sign(algorithm);
-        String refreshToken = JWT.create()
+                .withIssuedAt(Date())
+                .withClaim(
+                    "roles",
+                    user.roles.stream().map { role: Role -> role.name }
+                        .collect(Collectors.toList()),
+                )
+                .sign(algorithm)
+        val refreshToken =
+            JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenLifetime))
+                .withExpiresAt(Date(System.currentTimeMillis() + refreshTokenLifetime))
                 .withIssuer("refresh")
-                .withIssuedAt(new Date())
-                .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
-                .sign(algorithm);
-        accountService.updateAccessToken(username, accessToken);
-        accountService.updateRefreshToken(username, refreshToken);
-        return new Tokens(accessToken, refreshToken);
+                .withIssuedAt(Date())
+                .withClaim(
+                    "roles",
+                    user.roles.stream().map { role: Role -> role.name }
+                        .collect(Collectors.toList()),
+                )
+                .sign(algorithm)
+        accountService.updateAccessToken(username, accessToken)
+        accountService.updateRefreshToken(username, refreshToken)
+        return Tokens(accessToken, refreshToken)
     }
 
-    public String createAccessToken(User user) {
-        Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
-        String username = user.getUsername();
+    fun createAccessToken(user: User): String {
+        val algorithm = Algorithm.HMAC256(secret!!.toByteArray())
+        val username = user.username
         return JWT.create()
-                .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenLifetime))
-                .withIssuer("/api/accounts/login")
-                .withIssuedAt(new Date())
-                .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
-                .sign(algorithm);
+            .withSubject(username)
+            .withExpiresAt(Date(System.currentTimeMillis() + accessTokenLifetime))
+            .withIssuer("/api/accounts/login")
+            .withIssuedAt(Date())
+            .withClaim(
+                "roles",
+                user.roles.stream().map { role: Role -> role.name }
+                    .collect(Collectors.toList()),
+            )
+            .sign(algorithm)
     }
 
-    public DecodedJWT decodeJWT(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        return verifier.verify(token);
+    fun decodeJWT(token: String?): DecodedJWT {
+        val algorithm = Algorithm.HMAC256(secret)
+        val verifier = JWT.require(algorithm).build()
+        return verifier.verify(token)
     }
-//    public boolean validateJwtToken(String authToken) {
-//        try {
-//            JWT.decode(authToken);
-//            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-//            return true;
-//        } catch (SignatureException e) {
-//            log.error("Invalid JWT signature: " + e.getMessage());
-//        } catch (MalformedJwtException e) {
-//            log.error("Invalid JWT token: " + e.getMessage());
-//        } catch (ExpiredJwtException e) {
-//            log.error("JWT token is expired: " + e.getMessage());
-//        } catch (UnsupportedJwtException e) {
-//            log.error("JWT token is unsupported: " + e.getMessage());
-//        } catch (IllegalArgumentException e) {
-//            log.error("JWT claims string is empty: " + e.getMessage());
-//        }
-//        return false;
-//    }
 
-
-    public static record Tokens(String access_token, String refresh_token) {
-
-    }
+    @JvmRecord
+    data class Tokens(val access_token: String, val refresh_token: String)
 }
