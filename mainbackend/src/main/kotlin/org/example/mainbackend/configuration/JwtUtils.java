@@ -5,7 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
-import org.example.mainbackend.model.Role;
 import org.example.mainbackend.model.User;
 import org.example.mainbackend.service.AccountService;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,14 +30,14 @@ public class JwtUtils {
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenLifetime))
                 .withIssuer("access")
                 .withIssuedAt(new Date())
-                .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenLifetime))
                 .withIssuer("refresh")
                 .withIssuedAt(new Date())
-                .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                .withClaim("roles", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
                 .sign(algorithm);
         accountService.updateAccessToken(username, accessToken);
         accountService.updateRefreshToken(username, refreshToken);
