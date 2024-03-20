@@ -1,6 +1,8 @@
 package org.example.mainbackend.role;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.mainbackend.exception.ServerExceptions;
+import org.example.mainbackend.model.enums.RoleName;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,18 +20,10 @@ public class Roles {
     public final static String _ADMIN = "ADMIN";
     public final static String USER = "ROLE_USER";
     public final static String _USER = "USER";
-    public final static String MUSICIAN = "ROLE_MUSICIAN";
-    public final static String _MUSICIAN = "MUSICIAN";
-    public final static String PRODUCER = "ROLE_PRODUCER";
-    public final static String _PRODUCER = "PRODUCER";
 
 
     public static Set<String> basicRoles() {
-        return Set.of(ROOT, USER, ADMIN, MUSICIAN, PRODUCER);
-    }
-
-    public static Set<String> userRoles() {
-        return Set.of(MUSICIAN, PRODUCER);
+        return Set.of(ROOT, USER, ADMIN);
     }
 
     public static Set<String> privacyRoles() {
@@ -52,32 +46,24 @@ public class Roles {
         return auths.contains(role);
     }
 
-    public static void mustHaveRole(String role) throws ResponseException {
+    public static void mustHaveRole(String role) {
         if (!hasRole(role)) {
             log.warn("Permission denied, doesnt have: {}", role);
-            throw new ResponseException(HttpStatus.FORBIDDEN, "Permission denied, needs " + role + " properties");
+            ServerExceptions.FORBIDDEN.moreInfo("Permission denied, needs " + role + " properties").throwException();
         }
     }
 
 
-    public static void mustBeRoot() throws ResponseException {
+    public static void mustBeRoot() {
         mustHaveRole(Roles.ROOT);
     }
 
-    public static void mustBeAdmin() throws ResponseException {
+    public static void mustBeAdmin() {
         mustHaveRole(Roles.ADMIN);
     }
 
-    public static void mustBeUser() throws ResponseException {
+    public static void mustBeUser() {
         mustHaveRole(Roles.USER);
-    }
-
-    public static void mustBeMusician() throws ResponseException {
-        mustHaveRole(Roles.MUSICIAN);
-    }
-
-    public static void mustBeProducer() throws ResponseException {
-        mustHaveRole(Roles.PRODUCER);
     }
 
     public static Set<String> getAuthorities() {
@@ -88,11 +74,11 @@ public class Roles {
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
     }
 
-    public static void greaterPermission(Collection<String> roles) throws ResponseException {
+    public static void greaterPermission(Collection<String> roles) {
         Set<String> rols = new HashSet<>(roles);
         if (rols.contains(Roles.ROOT)) {
             log.warn("Permission denied, doesnt have access");
-            ResponseException.throwResponse(HttpStatus.FORBIDDEN, "Permission denied, needs GOD properties");
+            ServerExceptions.FORBIDDEN.moreInfo("Permission denied, needs GOD properties").throwException();
         } else if (rols.contains(Roles.ADMIN)) {
             mustBeRoot();
         } else if (roles.isEmpty()) {
@@ -102,13 +88,13 @@ public class Roles {
         }
     }
 
-    public static void greaterPermission(Set<Role> roles) throws ResponseException {
-        greaterPermission(roles.stream().map(Role::getName).collect(Collectors.toList()));
+    public static void greaterPermission(Set<RoleName> roles)  {
+        greaterPermission(roles.stream().map(Enum::name).collect(Collectors.toList()));
     }
 
-    public static void greaterPermission(String role) throws ResponseException {
+    public static void greaterPermission(String role) {
         if (role.equals(Roles.ROOT)) {
-            ResponseException.throwResponse(HttpStatus.FORBIDDEN, "Permission denied, needs God access");
+            ServerExceptions.FORBIDDEN.moreInfo("Permission denied, needs God access");
         } else if (role.equals(Roles.ADMIN)) {
             mustBeRoot();
         } else {
