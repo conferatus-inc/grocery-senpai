@@ -9,7 +9,6 @@ import org.example.mainbackend.service.AccountService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
-import java.util.stream.Collectors
 
 @Service
 class JwtUtils(
@@ -32,8 +31,7 @@ class JwtUtils(
                 .withIssuedAt(Date())
                 .withClaim(
                     "roles",
-                    user.roles.stream().map { role: Role -> role.name }
-                        .collect(Collectors.toList()),
+                    user.roles.map { role: Role -> role.name.toString() },
                 )
                 .sign(algorithm)
         val refreshToken =
@@ -44,8 +42,7 @@ class JwtUtils(
                 .withIssuedAt(Date())
                 .withClaim(
                     "roles",
-                    user.roles.stream().map { role: Role -> role.name }
-                        .collect(Collectors.toList()),
+                    user.roles.map { role: Role -> role.name.toString() },
                 )
                 .sign(algorithm)
         accountService.updateAccessToken(username, accessToken)
@@ -63,8 +60,7 @@ class JwtUtils(
             .withIssuedAt(Date())
             .withClaim(
                 "roles",
-                user.roles.stream().map { role: Role -> role.name }
-                    .collect(Collectors.toList()),
+                user.roles.map { role: Role -> role.name.toString() },
             )
             .sign(algorithm)
     }
