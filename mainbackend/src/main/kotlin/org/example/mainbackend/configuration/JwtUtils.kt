@@ -72,5 +72,5 @@ class JwtUtils(
     }
 
     @JvmRecord
-    data class Tokens(val access_token: String, val refresh_token: String)
+    data class Tokens(val accessToken: String, val refreshToken: String)
 }
