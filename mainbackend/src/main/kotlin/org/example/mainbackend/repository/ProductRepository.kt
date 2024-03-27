@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ProductRepository : JpaRepository<Product, Long> {
     fun findProductsByUser(user: User): List<Product>
 
-    fun findProductsByActiveAndUser(
+    fun findProductsByIsActiveAndUser(
         isActive: Boolean,
         user: User,
     ): List<Product>

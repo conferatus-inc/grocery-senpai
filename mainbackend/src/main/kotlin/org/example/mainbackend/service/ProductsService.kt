@@ -37,6 +37,6 @@ class ProductsService(
     }
 
     fun findActiveByUser(user: User): List<Product> {
-        return productRepository.findProductsByActiveAndUser(true, user)
+        return productRepository.findProductsByIsActiveAndUser(true, user)
     }
 }

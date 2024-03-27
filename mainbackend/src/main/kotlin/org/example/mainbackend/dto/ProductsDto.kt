@@ -8,7 +8,7 @@ data class ProductsDto(
 )
 
 data class ProductDto(
-    val id: Long,
+    val id: Long?,
     val category: String,
     val boughtOn: OffsetDateTime,
     val isActive: Boolean,
