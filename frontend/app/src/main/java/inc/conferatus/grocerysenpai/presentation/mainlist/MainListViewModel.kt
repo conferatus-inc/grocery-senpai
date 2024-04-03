@@ -95,14 +95,14 @@ class MainListViewModel @Inject constructor(
         private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
         // todo это вообще синглтон будет
-        private const val BASE_URL = "http://localhost:8887"
-        val api: ProductsApiService by lazy {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            retrofit.create(ProductsApiService::class.java)
-        }
+//        private const val BASE_URL = "http://localhost:8887"
+//        val api: ProductsApiService by lazy {
+//            val retrofit = Retrofit.Builder()
+//                .baseUrl(BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//            retrofit.create(ProductsApiService::class.java)
+//        }
     }
 
     // просто ужас
