@@ -11,26 +11,32 @@ jobs:
       - name: directory tree
         run: tree
 
-      - name: build and deploy
+      - name: build
+
+        run: |
+          cd ./mainbackend;
+          ls -al;
+          docker ps;
+          docker build -t grocery_backend:latest .;
+          docker image ls;
+          docker save -o /tmp/grocery_backend.tar grocery_backend:latest;
+          ls -al;
+          echo "ABOBA";
+          ls /tmp -al;
+      - name: deploy
         env:
           KEYP: ${{ secrets.KEYP }}
           KEYYA: ${{ secrets.KEYYA }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          cd ./mainbackend;
-          ls -al;
-          docker ps;
-          docker build -t grocery_backend:latest .;
-          docker save -o /tmp/grocery_backend.tar grocery_backend:latest;
-          cd /tmp;
-          ls -al;
-          echo -n "${KEYP}" > id_ed25519.pub;
-          echo -n "${KEYYA}" > id_ed25519;
-          chmod 400 id_ed25519.pub;
-          chmod 400 id_ed25519;
+          pwd;
+          echo -n "${KEYP}" > /tmp/id_ed25519.pub;
+          echo -n "${KEYYA}" > /tmp/id_ed25519;
+          chmod 400 /tmp/id_ed25519.pub;
+          chmod 400 /tmp/id_ed25519;
           echo "${KEYYA}" | ssh-add -;
-          ssh-add -T id_ed25519.pub;
+          ssh-add -T /tmp/id_ed25519.pub;
           ls -al;
           scp -oStrictHostKeyChecking=no /tmp/grocery_backend.tar ${SSH_USER}@${SSH_HOST}:/tmp;
           scp -oStrictHostKeyChecking=no update.sh ${SSH_USER}@${SSH_HOST}:/tmp;
