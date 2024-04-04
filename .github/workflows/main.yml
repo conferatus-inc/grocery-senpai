@@ -17,7 +17,7 @@ jobs:
           KEYYA: ${{ secrets.KEYYA }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-        run: >
+        run: |
           pwd;
           cd mainbackend;
           docker build -t "grocery_backend";
