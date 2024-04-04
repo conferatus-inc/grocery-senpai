@@ -5,17 +5,19 @@ jobs:
   backend_job:
     runs-on: ubuntu-latest
     name: building and ssh
-    environment: backend
+#    environment: backend
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+      - name: directory tree
+        run: tree
 
       - name: build and deploy
         env:
-          KEYP: ${{ secrets.KEYP }}
-          KEYYA: ${{ secrets.KEYYA }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+#          KEYP: ${{ secrets.KEYP }}
+#          KEYYA: ${{ secrets.KEYYA }}
+#          SSH_USER: ${{ secrets.SSH_USER }}
+#          SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
           pwd;
           cd ..;
