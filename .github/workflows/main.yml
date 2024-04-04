@@ -46,6 +46,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
+          pwd
           scp -oStrictHostKeyChecking=no /tmp/grocery_backend.tar cloud:/tmp;
-          scp -oStrictHostKeyChecking=no update.sh cloud:/tmp;
-          ssh cloud 'cd /tmp; ls -l; sh update.sh;';
+          scp -oStrictHostKeyChecking=no ./backend/update.sh cloud:/tmp;
+          ssh cloud 'cd /tmp; ls -l; sh ./backend/update.sh;';
