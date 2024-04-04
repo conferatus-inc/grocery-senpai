@@ -3,8 +3,11 @@ package org.example.mainbackend.controller
 import org.example.mainbackend.dto.ProductDto
 import org.example.mainbackend.dto.ProductsDto
 import org.example.mainbackend.model.Product
+import org.example.mainbackend.model.User
 import org.example.mainbackend.service.ProductsService
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,15 +18,41 @@ import org.springframework.web.bind.annotation.RestController
 class ProductsController(
     private val productsService: ProductsService,
 ) {
-    @PostMapping
-    fun addProduct(
-        @RequestBody purchase: ProductDto,
-    ): ProductDto {
-        return ProductDto(productsService.addProduct(Product(purchase)))
+    @GetMapping("/history")
+    fun getProductHistory(
+        @AuthenticationPrincipal user: User,
+    ): ProductsDto {
+        return ProductsDto(productsService.findByUser(user).map { ProductDto(it) })
     }
 
-    @GetMapping
-    fun getProducts(): ProductsDto {
-        return ProductsDto(productsService.findAll().map { ProductDto(it) })
+    @GetMapping("/active")
+    fun getActiveProducts(
+        @AuthenticationPrincipal user: User,
+    ): ProductsDto {
+        return ProductsDto(productsService.findActiveByUser(user).map { ProductDto(it) })
+    }
+
+    @PostMapping
+    fun addProduct(
+        @AuthenticationPrincipal user: User,
+        @RequestBody product: ProductDto,
+    ): ProductDto {
+        return ProductDto(productsService.addProductToUser(Product(product), user))
+    }
+
+    @GetMapping("/delete/{id}")
+    fun deleteProduct(
+        @PathVariable id: Long,
+        @AuthenticationPrincipal user: User,
+    ): ProductDto {
+        return ProductDto(productsService.deleteProductByIdAndUser(id, user))
+    }
+
+    @PostMapping("/edit")
+    fun editProduct(
+        @AuthenticationPrincipal user: User,
+        @RequestBody product: ProductDto,
+    ): ProductDto {
+        return ProductDto(productsService.editProduct(Product(product), user))
     }
 }
