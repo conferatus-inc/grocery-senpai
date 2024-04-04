@@ -13,7 +13,7 @@ jobs:
         run: tree
 
       - name: build and deploy
-        env:
+#        env:
 #          KEYP: ${{ secrets.KEYP }}
 #          KEYYA: ${{ secrets.KEYYA }}
 #          SSH_USER: ${{ secrets.SSH_USER }}
