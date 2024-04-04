@@ -20,6 +20,7 @@ jobs:
         run: |
           pwd;
           ls -al;
+          pwd;
           cd ./mainbackend;
           docker build -t "grocery_backend";
           docker save -o /tmp/grocery_backend.tar grocery_backend:latest;
