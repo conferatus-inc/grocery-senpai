@@ -11,7 +11,6 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: build and deploy
-        shell: bash
         env:
           KEYP: ${{ secrets.KEYP }}
           KEYYA: ${{ secrets.KEYYA }}
@@ -21,7 +20,7 @@ jobs:
           pwd;
           ls -al;
           pwd;
-          cd ./mainbackend;
+          cd ./mainbackend
           docker build -t "grocery_backend";
           docker save -o /tmp/grocery_backend.tar grocery_backend:latest;
           cd /tmp;
