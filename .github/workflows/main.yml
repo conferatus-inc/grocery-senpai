@@ -19,6 +19,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
           pwd;
+          ls -al;
           cd ./mainbackend;
           docker build -t "grocery_backend";
           docker save -o /tmp/grocery_backend.tar grocery_backend:latest;
