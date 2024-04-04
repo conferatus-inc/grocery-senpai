@@ -189,7 +189,6 @@ class MainActivity : ComponentActivity() {
         else {
             startRelogin()
         }
-
 //        binding.button.setOnClickListener { scanQrCodeLauncher.launch(null) }
 
         setContent {
