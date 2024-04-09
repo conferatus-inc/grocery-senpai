@@ -21,3 +21,4 @@ services:
     restart: always
 #    depends_on:
 #      - database
+# lol
