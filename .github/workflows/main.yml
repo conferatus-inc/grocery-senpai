@@ -4,7 +4,7 @@ on: [push]
 jobs:
   python_qr:
     runs-on: self-hosted
-    name: building and ssh python QR
+    name: python QR back
     environment: backend
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
 
   backend_job:
     runs-on: self-hosted
-    name: building and ssh kotlin mainbackend
+    name: kotlin mainbackend
     environment: backend
     steps:
       - uses: actions/checkout@v3
