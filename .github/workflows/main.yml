@@ -45,6 +45,7 @@ jobs:
   backend_job:
     runs-on: self-hosted
     name: kotlin mainbackend
+    needs: python_qr
     environment: backend
     steps:
       - uses: actions/checkout@v3

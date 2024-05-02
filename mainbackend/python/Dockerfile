@@ -10,6 +10,8 @@ COPY ./requirements.txt /code/requirements.txt
 #
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 #
+RUN pip install fastapi uvicorn
+#
 COPY ./qr /code/qr
 #
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8084"]
