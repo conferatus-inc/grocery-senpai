@@ -14,8 +14,8 @@ import java.util.*
 class JwtUtils(
     private val accountService: AccountService,
 ) {
-    private val accessTokenLifetime = (5 * 60 * 1000).toLong()
-    private val refreshTokenLifetime = (500 * 60 * 1000).toLong()
+    private val accessTokenLifetime = (5000 * 60 * 1000).toLong()
+    private val refreshTokenLifetime = (5000 * 60 * 1000).toLong()
 
     @Value("\${security.secret}")
     private val secret: String? = null
