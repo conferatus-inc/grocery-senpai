@@ -8,7 +8,7 @@ import org.example.mainbackend.model.User
 import org.example.mainbackend.service.AccountService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.Date
 
 @Service
 class JwtUtils(
@@ -17,7 +17,7 @@ class JwtUtils(
     private val accessTokenLifetime = (5000 * 60 * 1000).toLong()
     private val refreshTokenLifetime = (5000 * 60 * 1000).toLong()
 
-    @Value("\${security.secret}")
+    @Value("\${security.secret:aboba}")
     private val secret: String? = null
 
     fun createTokens(user: User): Tokens {
