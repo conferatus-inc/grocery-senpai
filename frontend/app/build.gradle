@@ -10,6 +10,7 @@ android {
     compileSdk 34
 
     defaultConfig {
+        manifestPlaceholders = [YANDEX_CLIENT_ID:"7b5557963a964ec5af04e72fa12e1180"]
         applicationId "inc.conferatus.grocerysenpai"
         minSdk 30
         targetSdk 33
@@ -32,12 +33,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     buildFeatures {
@@ -51,10 +52,11 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    buildToolsVersion '34.0.0'
 }
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -99,7 +101,9 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
+
+    implementation "com.yandex.android:authsdk:3.1.0"
 
     implementation 'org.apache.commons:commons-math3:3.6.1'
 }
