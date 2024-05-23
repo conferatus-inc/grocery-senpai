@@ -11,13 +11,25 @@ services:
     ports:
       - "5432:5432"
 
-  app:
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: grocery-senpai-main-backend
+#    ports:
+#      - "8080:8080"
+#    restart: always
+  qr:
     build:
-      context: .
+      context: ./python
       dockerfile: Dockerfile
-    container_name: grocery-senpai-main-backend
+    container_name: grocery-senpai-qr
     ports:
-      - "8080:8080"
+      - "8083:8083"
+    environment:
+      PORT: 8083
     restart: always
-    depends_on:
-      - database
+
+#    depends_on:
+#      - database
+# lol

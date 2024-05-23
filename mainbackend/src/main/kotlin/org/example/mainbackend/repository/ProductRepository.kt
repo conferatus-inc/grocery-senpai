@@ -3,16 +3,24 @@ package org.example.mainbackend.repository
 import org.example.mainbackend.model.Product
 import org.example.mainbackend.model.User
 import org.springframework.data.jpa.repository.JpaRepository
+import java.time.Instant
 
 interface ProductRepository : JpaRepository<Product, Long> {
-    fun findProductsByUser(user: User): List<Product>
+    fun findProductsByUserId(userId: Long): List<Product>
 
-    fun findProductsByIsActiveAndUser(
-        isActive: Boolean,
+    fun findProductsByUserIdAndUpdatedAfter(
+        userId: Long,
+        updated: Instant,
+    ): List<Product>
+
+    fun findProductsByIsDeletedAndUser(
+        isDeleted: Boolean,
         user: User,
     ): List<Product>
 
-//    override fun deleteById(
-//        id: Long,
-//    ): Product
+    fun findProductsByIsActiveAndIsDeletedAndUser(
+        isActive: Boolean,
+        isDeleted: Boolean,
+        user: User,
+    ): List<Product>
 }

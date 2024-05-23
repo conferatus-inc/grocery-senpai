@@ -1,5 +1,5 @@
 FROM openjdk:17-oracle
-FROM gradle:latest AS build
+FROM gradle:8.6 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle bootJar --no-daemon
@@ -10,4 +10,3 @@ COPY --from=build /home/gradle/src/build/libs/mainbackend-0.0.1-SNAPSHOT.jar /ap
 ENTRYPOINT ["java", "-jar", "/app/mainbackend-0.0.1-SNAPSHOT.jar"]
 EXPOSE 8080
 # FIXME не работает
-# 123
